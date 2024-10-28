@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Food Do'koni</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Fast Food Do'koniga Xush Kelibsiz!</h1>
+
+    <h2>Food Type'lar</h2>
+    <ul>
+        {% for food_type in food_types %}
+        <li>{{ food_type.nomi }}</li>
+        {% empty %}
+        <li>Food Type yo'q</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Ovqatlar</h2>
+    <ul>
+        {% for food in foods %}
+        <li>{{ food.nomi }} - {{ food.narxi }} so'm</li>
+        {% empty %}
+        <li>Ovqat yo'q</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'food_list' %}">Ovqatlar ro'yxatiga o'tish</a>
+</body>
+</html>

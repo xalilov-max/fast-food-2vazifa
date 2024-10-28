@@ -1,0 +1,6 @@
+<h1>{{ food.nomi }} ni o'chirishni xohlaysizmi?</h1>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Ha, o'chirish</button>
+</form>
+<a href="{% url 'food_list' %}">Bekor qilish</a>

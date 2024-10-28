@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ food.nomi }} - Tafsilotlar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ food.nomi }}</h1>
+        <p><strong>Tarkibi:</strong> {{ food.tarkibi }}</p>
+        <p><strong>Narxi:</strong> {{ food.narxi }} so'm</p>
+        <p><strong>Ko'rilgan soni:</strong> {{ food.ko_rishlar_soni }}</p>
+
+        <!-- Like Button -->
+        <form action="{% url 'toggle_like' food.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                {% if liked %} Unlike {% else %} Like {% endif %}
+            </button>
+        </form>
+        <p>{{ food.likes.count }} ta like</p>
+
+        <!-- Comment Section -->
+        <h3>Izohlar</h3>
+        <div class="comments-section">
+            {% for comment in comments %}
+                <div class="comment">
+                    <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                    <small>{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                </div>
+            {% empty %}
+                <p>Hozircha izohlar yo'q.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Add Comment Form -->
+        <form action="{% url 'add_comment' food.id %}" method="post" class="comment-form">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-secondary">Izoh qo'shish</button>
+        </form>
+
+        <!-- Edit and Delete Buttons (Only for Users with Permissions) -->
+        {% if perms.menu.change_food %}
+            <a href="{% url 'food_update' food.id %}" class="btn btn-warning">Tahrirlash</a>
+        {% endif %}
+        {% if perms.menu.delete_food %}
+            <form method="POST" action="{% url 'food_delete' food.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">O'chirish</button>
+            </form>
+        {% endif %}
+
+        <a href="{% url 'index' %}" class="btn btn-light">Orqaga qaytish</a>
+    </div>
+</body>
+</html>
